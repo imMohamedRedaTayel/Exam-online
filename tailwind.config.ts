@@ -12,6 +12,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      boxShadow: {
+        'custom-blur': '0px 4px 20px rgba(0, 0, 0, 0.1)',
+      },
     },
   },
   plugins: [],
