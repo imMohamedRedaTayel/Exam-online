@@ -1,2 +1,2 @@
-import analysis from '@/app/analysis/page'
-export default analysis
+import Analyisis from '@/app/dashboard/layout';
+export default Analyisis

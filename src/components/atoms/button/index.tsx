@@ -9,7 +9,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     return (
         <button
             onClick={onClick}
-            className={` text-[16px] font-normal h-[56px] rounded-[20px] bg-[#4461F2] text-white ${className} `}
+            className={` text-[16px] h-[56px] rounded-[20px] bg-[#4461F2] text-white ${className} `}
             {...rest}
         >
             {children}

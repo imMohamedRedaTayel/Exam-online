@@ -9,7 +9,7 @@ type AuthLayoutProps = {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <section className="signup h-screen">
+    <section className="signup h-screen bg-white ">
       <div className="flex flex-wrap h-full items-start">
         {/* الجانب الأيسر */}
         <div className="w-full md:w-6/12 flex justify-center h-full bg-[#F0F4FC] py-6 px-4 md:py-8 md:px-8 shadow-custom-blur rounded-tr-[0px] md:rounded-tr-[80px] md:rounded-br-[80px]">
@@ -33,7 +33,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
         </div>
 
         {/* الجانب الأيمن */}
-        <div className="w-full md:w-6/12 py-6 px-4 md:py-8 md:px-8 h-full overflow-y-auto">
+        <div className="w-full md:w-6/12 py-6 px-4 md:py-8 md:px-8 h-full overflow-y-auto ">
           <div className="links flex items-center gap-4 md:gap-6 justify-center md:justify-end">
             <Link href="/login" className="text-[#4461F2] font-[700] text-[16px] md:text-[20px] cursor-pointer">
               Sign in

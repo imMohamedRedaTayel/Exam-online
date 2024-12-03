@@ -4,6 +4,8 @@
 
 :root {
   --mainColor: #4461F2;
+  --text-gray: #696F79;
+  --light-gray: #979CA3;
 }
 
 *{
@@ -14,6 +16,7 @@
 
 body { 
   font-family: "Poppins", sans-serif;
+  background-color: #FBF9F9;
 }
 
 .row {

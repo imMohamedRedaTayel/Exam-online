@@ -9,3 +9,12 @@ export interface FormValues {
     phone?: string;
     resetCode?: any
 }
+
+export interface appSlice {
+    showSideBar: boolean;
+    selectedLink: string
+}
+
+export interface Store {
+    appSlice: appSlice
+}

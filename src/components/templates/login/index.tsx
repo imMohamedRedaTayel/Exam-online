@@ -22,7 +22,7 @@ const LoginTemplates = (props: Props) => {
         try {
             const result = await signIn("credentials", {
                 ...formValues,
-                callbackUrl: "/",
+                callbackUrl: "/dashboard/analysis",
                 redirect: false,
             });
             console.log(result, 'result');
