@@ -5,24 +5,22 @@ import Link from 'next/link'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { IoMdMenu, IoMdClose } from "react-icons/io"
-import { setSelectedLink, toggleSideBar } from '@/app/appSlice'
+import { toggleSideBar } from '@/app/appSlice'
 import { MdSpaceDashboard } from "react-icons/md";
 import { FaHistory } from "react-icons/fa";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { signOut } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 
 type Props = {}
 
 const Sidebar = (props: Props) => {
     const dispatch = useDispatch();
-    const { showSideBar, selectedLink } = useSelector((store: Store) => store.appSlice);
+    const { showSideBar } = useSelector((store: Store) => store.appSlice);
+    const pathName = usePathname();
 
     const handleToggleSidebar = () => {
         dispatch(toggleSideBar(!showSideBar));
-    };
-
-    const handleLinkClick = (link: string) => {
-        dispatch(setSelectedLink(link));
     };
 
     const handleLogout = () => {
@@ -36,7 +34,7 @@ const Sidebar = (props: Props) => {
             icon: <MdSpaceDashboard />,
         },
         {
-            href: '/dashboard/client',
+            href: '/dashboard/quiz',
             label: 'Quiz History',
             icon: <FaHistory />,
         },
@@ -62,11 +60,10 @@ const Sidebar = (props: Props) => {
                             <li key={index} className=' cursor-pointer '>
                                 <Link
                                     href={link.href}
-                                    className={`flex items-center gap-x-[10px] p-2 rounded-lg group justify-center   ${selectedLink === link.href ? 'bg-[--mainColor] text-white ' : ''}`}
-                                    onClick={() => handleLinkClick(link.href)}
+                                    className={`flex items-center gap-x-[10px] p-2 rounded-lg group justify-center   ${pathName === link.href ? 'bg-[--mainColor] text-white ' : ''}`}
                                 >
-                                    <span className={ ` text-[24px] text-[--mainColor] ${ !showSideBar ? 'hidden md:block ' : ''} ${selectedLink === link.href ? 'bg-[--mainColor] text-white ' : ''} ` }> { link.icon } </span>
-                                    {showSideBar && <span className={ ` text-[18px] font-[600] text-[--text-gray] ${selectedLink === link.href ? 'bg-[--mainColor] text-white ' : ''} ` } >{link.label}</span>}
+                                    <span className={ ` text-[24px] text-[--mainColor] ${ !showSideBar ? 'hidden md:block ' : ''} ${pathName === link.href ? 'bg-[--mainColor] text-white ' : ''} ` }> { link.icon } </span>
+                                    {showSideBar && <span className={ ` text-[18px] font-[600] text-[--text-gray] ${pathName === link.href ? 'bg-[--mainColor] text-white ' : ''} ` } >{link.label}</span>}
                                 </Link>
                             </li>
                         ))}
@@ -93,3 +90,4 @@ const Sidebar = (props: Props) => {
 };
 
 export default Sidebar;
+ 
