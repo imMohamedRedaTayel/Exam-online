@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import React from 'react'
 import Profile from './components/profile'
 import Quizes from './components/quizes'

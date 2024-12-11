@@ -15,6 +15,17 @@ export interface appSlice {
     selectedLink: string
 }
 
+export interface quizesSlice { 
+    data: any,
+    loading: boolean,
+    error: boolean,
+    nextPage: any, 
+    isLoadingMore: boolean
+}
+
 export interface Store {
     appSlice: appSlice
+    quizesSlice: quizesSlice
+    examSlice: any
+    examsSlice: any
 }

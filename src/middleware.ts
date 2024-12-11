@@ -17,5 +17,5 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/client", "/server", "/analysis" , '/' ], // المسارات التي يتم تطبيق الميدل وير عليها
+    matcher: [ "/server", "/dashboard/analysis" , '/' , '/dashboard/exam' , '/dashboard' ], // المسارات التي يتم تطبيق الميدل وير عليها
 };
