@@ -8,6 +8,7 @@ import Loading from "@/components/atoms/loading";
 import Card from "./components/card";
 import { useSession } from "next-auth/react";
 import { setToken } from "@/app/appSlice";
+import ExaSteps from "../(operations)/exaSteps";
 
 
 type Props = {
@@ -15,6 +16,7 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
+    
     const { data: { exams }, loading, error } = useSelector((state: Store) => state.examSlice);
     const { data }: any = useSession();
     const dispatch = useDispatch();
@@ -22,7 +24,7 @@ const Page = ({ params }: Props) => {
     useEffect(() => {
         const unwrapParams = async () => {
             const { id } = await params;
-            if (data?.token) {
+            if ( id && data?.token) {
                 dispatch(setToken(data?.token));
                 dispatch(fetchData(id));
             }
@@ -30,7 +32,7 @@ const Page = ({ params }: Props) => {
         unwrapParams();
     }, [params, dispatch, data?.token]);
 
-    console.log(exams, "exams");
+    // console.log(exams, "exams");
 
     return (
         <>
@@ -64,6 +66,7 @@ const Page = ({ params }: Props) => {
                         </>
                     )}
                 </div>
+                <ExaSteps />
             </section>
         </>
     );

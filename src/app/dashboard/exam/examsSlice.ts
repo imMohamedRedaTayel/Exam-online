@@ -20,9 +20,10 @@ export const examsSlice = createSlice({
         fetchDataFailed: ( state ) => {
             state.error = true
             state.loading = false
-        }
+        }, 
+
     }
 })
 
-export const { fetchData , setData , fetchDataFailed } = examsSlice.actions
+export const { fetchData , setData , fetchDataFailed  } = examsSlice.actions
 export const examsReducer = examsSlice.reducer

@@ -27,5 +27,6 @@ export interface Store {
     appSlice: appSlice
     quizesSlice: quizesSlice
     examSlice: any
-    examsSlice: any
+    examsSlice: any , 
+    exaStepsSlice: any
 }

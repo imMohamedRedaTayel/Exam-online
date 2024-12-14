@@ -16,13 +16,13 @@ export default function RootLayout({
 
   return (
     <div className="flex h-screen">
-    <Sidebar />
-    <div className="flex-1 flex flex-col relative h-full">
-      <Header />
-      <div className="flex-1 md:px-7  overflow-y-auto">
-        {children}
+      <Sidebar />
+      <div className="flex-1 flex flex-col relative h-full">
+        <Header />
+        <div className="flex-1 md:px-7  overflow-y-auto">
+          {children}
+        </div>
       </div>
     </div>
-  </div>
   );
 }

@@ -1,6 +1,7 @@
 import Button from "@/components/atoms/button";
-import Modle from "@/components/atoms/modle";
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { toggleModel } from "../../(operations)/exaSteps/exaStepsSlice";
 
 type CardProps = {
     id: string;
@@ -11,14 +12,11 @@ type CardProps = {
 
 const Card = ({ id, title, numberOfQuestions, duration }: CardProps) => {
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleOpenModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
+    console.log(id);
+    
+    const dispatch = useDispatch()
+    const openModal = () => {
+        dispatch(toggleModel(id));
     };
 
     return (
@@ -42,18 +40,11 @@ const Card = ({ id, title, numberOfQuestions, duration }: CardProps) => {
             <div className="flex flex-col items-center gap-y-[12px]">
                 <p className="text-[13px] font-[400] text-[#0F0F0F]">{duration} minutes </p>
                 <Button
-                    onClick={handleOpenModal}
+                    onClick={openModal}
                     className="!py-[4px] !px-[24px] !h-[23px] !text-[12px] !font-[500] !leading-tight">
                     Start
                 </Button>
             </div>
-
-            {isModalOpen && (
-                <Modle
-                    isOpen={isModalOpen}
-                    onClose={handleCloseModal}
-                />
-            )}
 
         </div>
     );

@@ -8,6 +8,7 @@ import Loading from "@/components/atoms/loading";
 import { useSession } from "next-auth/react";
 import { setToken } from "@/app/appSlice";
 import Card from "./components/card";
+import ExaSteps from "./(operations)/exaSteps";
 
 
 type Props = {};
@@ -58,7 +59,10 @@ const Page = () => {
             </>
           )}
         </div>
+        <ExaSteps />  
       </section>
+      {/* <ExaSteps />   */}
+
     </>
   );
 };

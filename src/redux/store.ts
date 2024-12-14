@@ -5,6 +5,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import rootSaga from "./saga";
 import { examReducer } from "@/app/dashboard/exam/[id]/examSlice";
 import { examsReducer } from "@/app/dashboard/exam/examsSlice";
+import { exaStepsReducer } from "@/app/dashboard/exam/(operations)/exaSteps/exaStepsSlice";
 
 // إنشاء sagaMiddleware
 const sagaMiddleware = createSagaMiddleware();
@@ -15,7 +16,8 @@ export const store = configureStore({
         appSlice: appReducer,
         quizesSlice: quizesReducer,
         examSlice: examReducer , 
-        examsSlice: examsReducer
+        examsSlice: examsReducer , 
+        exaStepsSlice: exaStepsReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware), // إضافة sagaMiddleware

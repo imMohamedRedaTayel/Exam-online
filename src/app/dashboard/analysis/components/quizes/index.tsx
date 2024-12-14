@@ -12,6 +12,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 type Props = {};
 
 const Quizes = (props: Props) => {
+    
     const dispatch = useDispatch();
     const { data }: any = useSession();
     const { data: subjects, loading, error, nextPage , isLoadingMore } = useSelector((state: Store) => state.quizesSlice);
@@ -22,7 +23,6 @@ const Quizes = (props: Props) => {
             dispatch(fetchData());
         }
     }, [dispatch, data?.token]);
-
 
     return (
         <div>
