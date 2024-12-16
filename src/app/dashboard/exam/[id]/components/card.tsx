@@ -12,11 +12,15 @@ type CardProps = {
 
 const Card = ({ id, title, numberOfQuestions, duration }: CardProps) => {
 
-    console.log(id);
+    // console.log(id , 'id exam' );
     
     const dispatch = useDispatch()
     const openModal = () => {
-        dispatch(toggleModel(id));
+        if (id) {
+            dispatch(toggleModel(id));
+        } else {
+            console.error("Invalid exam ID");
+        }
     };
 
     return (

@@ -25,7 +25,7 @@ const Page = () => {
     }
   }, [dispatch, data?.token]);
 
-  console.log(exams, "exams");
+  // console.log(exams, "exams");
 
   return (
     <>

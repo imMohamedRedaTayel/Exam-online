@@ -16,7 +16,7 @@ const VerifyCodeTemplates = (props: Props) => {
 
     const router = useRouter()
     const handleSubmit = async (formValues: FormValues) => {
-        console.log(formValues.resetCode , 'formValues.resetCode');
+        // console.log(formValues.resetCode , 'formValues.resetCode');
         
         try {
             let { data } = await axios.post(`https://exam.elevateegy.com/api/v1/auth/verifyResetCode`, 
@@ -24,7 +24,7 @@ const VerifyCodeTemplates = (props: Props) => {
                     resetCode: formValues.resetCode.toString() ,
                 }
             )
-            console.log(data, 'data');
+            // console.log(data, 'data');
             if (data.status === 'Success') {
                 showToast.success("The reset code is valid.");
                 setTimeout(() => {

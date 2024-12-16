@@ -23,7 +23,7 @@ const Page = ({ params }: Props) => {
 
     useEffect(() => {
         const unwrapParams = async () => {
-            const { id } = await params;
+            const { id } = await params;            
             if ( id && data?.token) {
                 dispatch(setToken(data?.token));
                 dispatch(fetchData(id));

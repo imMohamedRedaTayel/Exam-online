@@ -21,9 +21,7 @@ const Header = (props: Props) => {
         setSearch(e.target.value);
     };
 
-    const handleMenuClick = () => {
-        console.log('redaa');
-        
+    const handleMenuClick = () => {        
         dispatch(toggleSideBar(!showSideBar)); // عند الضغط على الأيقونة يظهر الشريط الجانبي
     };
 

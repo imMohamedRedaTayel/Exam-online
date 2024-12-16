@@ -5,7 +5,7 @@ import { fetchDataFailed, setData } from './exaStepsSlice';
 
 interface Variables {
     token: string;
-    selectedExamId: string
+    selectedExamId: any
 }
 
 function* prepareVariables(): Generator<unknown, Variables, unknown> {
@@ -18,6 +18,7 @@ function* prepareVariables(): Generator<unknown, Variables, unknown> {
 function* fetchDataSaga(action: any) {
     try {
         const { token, selectedExamId }: Variables = yield call(prepareVariables);
+        
         const { data } = yield call(axios.get, `https://exam.elevateegy.com/api/v1/questions?exam=${selectedExamId}`, {
             headers: { token },
             // params: { exam: selectedExamId }

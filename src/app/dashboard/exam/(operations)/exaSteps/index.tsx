@@ -9,9 +9,16 @@ import { Modal } from "@/components/molecules/Modal";
 
 const ExaSteps = () => {
     const dispatch = useDispatch();
-    const { data: { questions }, loading, error, showModel, selectedExamId } = useSelector(
-        (state: Store) => state.exaStepsSlice
-    );
+    const {
+        data: { questions },
+        loading,
+        error,
+        showModel,
+        selectedExamId,
+        currentQuestionIndex,
+        selectedAnswers
+    } = useSelector((state: Store) => state.exaStepsSlice);
+
     const { data }: any = useSession();
 
     // Close modal handler
@@ -29,14 +36,15 @@ const ExaSteps = () => {
     // Fetch data when selectedExamId changes
     useEffect(() => {
         if (selectedExamId) {
+            // console.log( selectedExamId , 'selectedExamIdselectedExamIdselectedExamId' );
             dispatch(fetchData());
         }
     }, [dispatch, selectedExamId]);
 
-    console.log(questions, "Exam Data");
+    // console.log(questions, "Exam Data");
 
-    const examDuration = questions?.[0]?.exam?.duration * 60 ;
-    
+    const examDuration = questions?.[0]?.exam?.duration * 60;
+
 
     return (
         <div>
@@ -47,8 +55,10 @@ const ExaSteps = () => {
                     questions={questions}
                     loading={loading}
                     duration={examDuration}
+                    currentQuestionIndex={currentQuestionIndex}
+                    selectedAnswers={selectedAnswers}
                 />
-                }
+            }
         </div>
     );
 };

@@ -2,6 +2,7 @@ import Button from '@/components/atoms/button'
 import React, { useState } from 'react'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import Results from '../results';
 
 type Props = {
     score: number;
@@ -10,17 +11,17 @@ type Props = {
 }
 
 const Score = ({ score, correctAnswers, incorrectAnswers }: Props) => {
-    const [isModalVisible, setIsModalVisible] = useState(true); // حالة للتحكم في عرض الـ div بالكامل
+    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [showResults, setShowResults] = useState(false); // حالة جديدة لعرض Results
 
-    // دالة لإخفاء الـ div عند الضغط على الزر
-    const handleHideModal = () => {
-        setIsModalVisible(false); // تعيين الحالة إلى false لإخفاء الـ div
-    }
+    
+    if (!isModalOpen) return null;
 
     return (
         <>
-            {isModalVisible && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            {/* إظهار مكون Score فقط إذا كانت showResults تساوي false */}
+            {!showResults && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-40">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-[300px] md:w-[500px]">
                         {/* Header */}
                         <div className="flex items-center justify-between">
@@ -59,12 +60,13 @@ const Score = ({ score, correctAnswers, incorrectAnswers }: Props) => {
                         {/* Navigation Buttons */}
                         <div className="mt-6 flex justify-between gap-[50px]">
                             <Button
-                                onClick={handleHideModal} // عند الضغط على الزر، سنخفي الـ div
+                                onClick={() => setIsModalOpen(false)} // إغلاق المودال
                                 className="!h-[50px] bg-transparent border border-[--mainColor] !text-[--mainColor] rounded-[100px] w-full"
                             >
                                 Back
                             </Button>
                             <Button
+                                onClick={() => setShowResults(true)} // عند الضغط هنا، إظهار مكون Results وإخفاء Score
                                 className="!h-[50px] bg-[--mainColor] text-white rounded-[100px] w-full"
                             >
                                 Show results
@@ -73,6 +75,9 @@ const Score = ({ score, correctAnswers, incorrectAnswers }: Props) => {
                     </div>
                 </div>
             )}
+
+            {/* عرض مكون Results فقط إذا كانت الحالة showResults تساوي true */}
+            {showResults && <Results />}
         </>
     );
 }

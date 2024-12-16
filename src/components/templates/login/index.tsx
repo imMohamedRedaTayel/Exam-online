@@ -18,14 +18,14 @@ const LoginTemplates = (props: Props) => {
 
     const router = useRouter();
     const handleSubmit = async (formValues: FormValues) => {
-        console.log(formValues, 'formValues');
+        // console.log(formValues, 'formValues');
         try {
             const result = await signIn("credentials", {
                 ...formValues,
                 callbackUrl: "/dashboard/analysis",
                 redirect: false,
             });
-            console.log(result, 'result');
+            // console.log(result, 'result');
             if (result?.ok) {
 
                 showToast.success("Registration has been completed successfully.");

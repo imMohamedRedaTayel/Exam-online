@@ -17,14 +17,14 @@ const SetPasswordTemplates = (props: Props) => {
 
     const router = useRouter()
     const handleSubmit = async (formValues: FormValues) => {
-        console.log(formValues , 'formValues.resetCode');
+        // console.log(formValues , 'formValues.resetCode');
         
         try {
             let { data } = await axios.put(`https://exam.elevateegy.com/api/v1/auth/resetPassword` , {
                 email: formValues?.email , 
                 newPassword: formValues?.newPassword 
             } )
-            console.log(data, 'data');
+            // console.log(data, 'data');
             if (data.message === 'success') {
                 showToast.success("Password reset successfully.");
                 setTimeout(() => {

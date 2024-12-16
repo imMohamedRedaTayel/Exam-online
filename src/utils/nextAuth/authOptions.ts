@@ -24,7 +24,7 @@ export const authOptions : NextAuthOptions  = {
       async authorize(credentials: any) {
 
         const { email, password } = credentials;
-        // console.log(credentials, 'credentials');
+        console.log(credentials, 'credentials');
 
         try {
           const { data } = await axios.post(

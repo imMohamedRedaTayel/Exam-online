@@ -5,6 +5,9 @@ import RadioButton from "@/components/atoms/radioButton";
 import { useState, useEffect } from "react";
 import Score from "../score";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import { calculateResults, setCurrentQuestionIndex, setLoadingScore, setSelectedAnswerForQuestion, setShowScore, setTimeRemaining } from "@/app/dashboard/exam/(operations)/exaSteps/exaStepsSlice";
+import { Store } from "@/types";
 
 type Answer = {
     answer: string;
@@ -24,32 +27,42 @@ type ModalProps = {
     questions: Question[];
     loading: boolean;
     duration: number;
+    currentQuestionIndex: number,
+    selectedAnswers: any
 };
 
-export const Modal = ({ isOpen, onClose, questions = [], loading, duration }: ModalProps) => {
+export const Modal = ({ isOpen, onClose, questions = [], loading, duration, currentQuestionIndex, selectedAnswers }: ModalProps) => {
 
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [selectedAnswers, setSelectedAnswers] = useState<{ [key: string]: string | null }>({});
-    const [showScore, setShowScore] = useState(false);
-    const [loadingScore, setLoadingScore] = useState(false);
+    const { showScore, timeRemaining, loadingScore, correctAnswers, incorrectAnswers, score } = useSelector((state: Store) => state.exaStepsSlice);
+    const dispatch = useDispatch();
 
-    // حالة لحفظ الوقت المتبقي
-    const [timeRemaining, setTimeRemaining] = useState(duration); // 25 دقيقة بالثواني
+    // تعيين timeRemaining بناءً على duration عندما يتغير
+    useEffect(() => {
+        if (isOpen && duration > 0) {
+            dispatch(setTimeRemaining(duration)); // تحويل الدقائق إلى ثواني وتعيين الوقت المتبقي
+        }
+    }, [isOpen, duration, dispatch]);
 
     useEffect(() => {
         const timer = setInterval(() => {
-            setTimeRemaining((prevTime) => {
-                if (prevTime <= 0) {
-                    clearInterval(timer);
-                    return 0;
-                }
-                return prevTime - 1;
-            });
+            if (timeRemaining <= 0) {
+                clearInterval(timer);
+                onClose(); // إغلاق الـ Modal عندما ينتهي الوقت
+            } else {
+                dispatch(setTimeRemaining(timeRemaining - 1));
+            }
         }, 1000);
 
-        // تنظيف المؤقت عند الخروج
-        return () => clearInterval(timer);
-    }, [duration]); // إضافة dependency على duration في حال تغييره
+        return () => clearInterval(timer); // تنظيف التايمر عند إغلاق الـ Modal أو تغيير القيم
+    }, [timeRemaining, dispatch, onClose]);
+
+
+    // حساب الإجابات الصحيحة والخاطئة وتعيين النتيجة في Redux عند تغير الأسئلة أو الإجابات
+    useEffect(() => {
+        if (questions.length > 0 && Object.keys(selectedAnswers).length > 0) {
+            dispatch(calculateResults({ questions }));
+        }
+    }, [questions, selectedAnswers, dispatch]);
 
 
     if (!isOpen || questions.length === 0) {
@@ -59,8 +72,8 @@ export const Modal = ({ isOpen, onClose, questions = [], loading, duration }: Mo
             </div>
         ) : (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                <div className="bg-white p-6 rounded-lg shadow-lg w-[300px] md:w-[500px]">
-                    <h2 className="text-[24px] font-[500]">لا يوجد امتحان الآن</h2>
+                <div className="bg-white p-6 rounded-lg shadow-lg w-[300px] md:w-[500px] flex justify-center items-center flex-col ">
+                    <h2 className="text-[24px] font-[500]"> There is no exam now </h2>
                     <div className="mt-6 flex justify-end">
                         <button
                             className="px-4 py-2 bg-red-500 text-white rounded-lg"
@@ -78,75 +91,55 @@ export const Modal = ({ isOpen, onClose, questions = [], loading, duration }: Mo
 
     // دالة لاختيار الإجابة
     const handleSelectAnswer = (answer: string) => {
-        setSelectedAnswers((prev) => ({
-            ...prev,
-            [currentQuestion._id]: answer,
-        }));
-    };
-
-    // حساب الإجابات الصحيحة والخاطئة
-    const calculateCorrectAnswers = () => {
-        let correctAnswers = 0;
-        let incorrectAnswers = 0;
-
-        questions.forEach((question) => {
-            if (selectedAnswers[question._id] === question.correct) {
-                correctAnswers += 1;
-            } else if (selectedAnswers[question._id] !== null) {
-                incorrectAnswers += 1;
-            }
-        });
-
-        return { correctAnswers, incorrectAnswers };
-    };
-
-    // حساب النتيجة المئوية
-    const calculateScore = () => {
-        const { correctAnswers } = calculateCorrectAnswers();
-        return Math.round((correctAnswers / questions.length) * 100);
+        const currentQuestion = questions[currentQuestionIndex];
+        // تحديث selectedAnswers في الـ Redux عند تحديد إجابة
+        dispatch(setSelectedAnswerForQuestion({ questionId: currentQuestion._id, answer }));
     };
 
     // الانتقال للسؤال التالي أو عرض النتيجة
     const handleNext = () => {
         if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex((prev) => prev + 1);
+            dispatch(setCurrentQuestionIndex(currentQuestionIndex + 1));
         } else {
-            setLoadingScore(true); // تفعيل شاشة التحميل
+            dispatch(setLoadingScore(true)); // تفعيل شاشة التحميل
             setTimeout(() => {
-                setShowScore(true);
-                setLoadingScore(false); // إيقاف شاشة التحميل بعد فترة
+                dispatch(setShowScore(true)); // إظهار النتيجة
+                dispatch(setLoadingScore(false)); // إيقاف شاشة التحميل بعد 2 ثانية
             }, 2000); // مدة شاشة التحميل (2 ثانية)
         }
     };
-    
+
 
     const handlePrev = () => {
         if (currentQuestionIndex > 0) {
-            setCurrentQuestionIndex((prev) => prev - 1);
+            dispatch(setCurrentQuestionIndex(currentQuestionIndex - 1));
         }
     };
 
     // استخدام Luxon لتحويل الوقت المتبقي من ثواني إلى دقيقة:ثانية
-    const formatTime = (seconds: number) => {
-        if (isNaN(seconds)) return "0:00"; // Prevent NaN from showing
+    const formatTime = (seconds: number): string => {
+        if (isNaN(seconds) || seconds < 0) return "0:00"; // منع NaN أو القيم السلبية
         return DateTime.fromSeconds(seconds).toFormat('mm:ss');
     };
 
-    const { correctAnswers, incorrectAnswers } = calculateCorrectAnswers();
 
     return (
         <>
             {showScore ? (
-                loadingScore ? (
-                    <div className="flex justify-center items-center z-50 w-full h-screen bg-red-400  ">
+                !loadingScore ? (
+                    <Score
+                        score={score}
+                        correctAnswers={correctAnswers}
+                        incorrectAnswers={incorrectAnswers}
+                    />
+                ) : (
+                    <div className="flex justify-center items-center z-50 w-full">
                         <Loading />
                     </div>
-                ) : (
-                    <Score score={calculateScore()} correctAnswers={correctAnswers} incorrectAnswers={incorrectAnswers} />
                 )
 
             ) : (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-40">
                     {!loading ? <>
                         <div className="bg-white p-6 rounded-lg shadow-lg w-[300px] md:w-[500px]">
                             <div className="flex items-center justify-between">
@@ -201,14 +194,14 @@ export const Modal = ({ isOpen, onClose, questions = [], loading, duration }: Mo
                                 </Button>
                             </div>
 
-                            <div className="mt-6 flex justify-end">
+                            {/* <div className="mt-6 flex justify-end">
                                 <button
                                     className="px-4 py-2 bg-red-500 text-white rounded-lg"
                                     onClick={onClose}
                                 >
                                     Close
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
 
                     </> : <>
