@@ -65,28 +65,31 @@ export const exaStepsSlice = createSlice({
         setLoadingScore: ( state , action ) => {
             state.loadingScore = action.payload
         }, 
-        calculateResults(state:any, action: PayloadAction<any>) {
+        calculateResults: (state:any, action) => {
             const { questions } = action.payload;
             let correctAnswers = 0;
             let incorrectAnswers = 0;
-            let incorrectQuestions:any = [];
-      
-            questions.forEach((question: any) => {
-              if (state.selectedAnswers[question._id] === question.correct) {
-                correctAnswers += 1;
-              } else if (state.selectedAnswers[question._id] !== null) {
-                incorrectAnswers += 1;
-                incorrectQuestions.push(question);
-              }
+            const incorrectQuestions:any = [];
+        
+            questions.forEach((question:any) => {
+                const selectedAnswer = state.selectedAnswers[question._id];
+                if (selectedAnswer === question.correct) {
+                    correctAnswers += 1;
+                } else {
+                    incorrectAnswers += 1;
+                    incorrectQuestions.push({
+                        ...question,
+                        selected: selectedAnswer, // إضافة الإجابة المختارة
+                    });
+                }
             });
-      
-            const score = Math.round((correctAnswers / questions.length) * 100);
-      
+        
             state.correctAnswers = correctAnswers;
             state.incorrectAnswers = incorrectAnswers;
-            state.score = score;
-            state.incorrectQuestions = incorrectQuestions;
-          },
+            state.incorrectQuestions = incorrectQuestions; // تخزين الأسئلة الخاطئة
+            state.score = (correctAnswers / questions.length) * 100;
+        },
+        
           
     }
 })
